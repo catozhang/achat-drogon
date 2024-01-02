@@ -216,9 +216,31 @@ class WebSocketConnection
      */
     virtual void disablePing() = 0;
 
+// カスタマイズ Start
+    void setConnectionId(const std::string &id)
+    {
+        std::lock_guard<std::mutex> lck(mutex_);
+        connectionId_ = id;
+    }
+
+    /**
+     * @brief Get the connection ID of the current WebSocketConnection.
+     */
+    std::string connectionId() const
+    {
+        std::lock_guard<std::mutex> lck(mutex_);
+        return connectionId_;
+    }
+// カスタマイズ End
+
   private:
     std::shared_ptr<void> contextPtr_;
-};
 
+// カスタマイズ Start    
+    std::string connectionId_;
+    mutable std::mutex mutex_;
+// カスタマイズ End
+    
+};
 using WebSocketConnectionPtr = std::shared_ptr<WebSocketConnection>;
 }  // namespace drogon
