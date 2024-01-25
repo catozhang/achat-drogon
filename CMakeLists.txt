@@ -24,7 +24,7 @@ CMAKE_DEPENDENT_OPTION(USE_SPDLOG "Allow using the spdlog logging library" OFF "
 
 set(DROGON_MAJOR_VERSION 1)
 set(DROGON_MINOR_VERSION 9)
-set(DROGON_PATCH_VERSION 1)
+set(DROGON_PATCH_VERSION 2)
 set(DROGON_VERSION
     ${DROGON_MAJOR_VERSION}.${DROGON_MINOR_VERSION}.${DROGON_PATCH_VERSION})
 set(DROGON_VERSION_STRING "${DROGON_VERSION}")
@@ -66,7 +66,7 @@ if (BUILD_SHARED_LIBS)
         SOVERSION ${DROGON_MAJOR_VERSION})
     target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
     if (WIN32)
-        target_link_libraries(${PROJECT_NAME} PUBLIC Rpcrt4 ws2_32 crypt32 Advapi32)
+        target_link_libraries(${PROJECT_NAME} PUBLIC rpcrt4 crypt32 advapi32 ws2_32)
         if (CMAKE_CXX_COMPILER_ID MATCHES MSVC)
             # Ignore MSVC C4251 and C4275 warning of exporting std objects with no dll export
             # We export class to facilitate maintenance, thus if you compile
@@ -141,7 +141,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Haiku")
 elseif (NOT WIN32 AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
     target_link_libraries(${PROJECT_NAME} PRIVATE dl)
 elseif (WIN32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE shlwapi)
+    target_link_libraries(${PROJECT_NAME} PRIVATE shlwapi ws2_32 iphlpapi)
 endif ()
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules/)
